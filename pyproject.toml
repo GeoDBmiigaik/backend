@@ -1,8 +1,33 @@
 [build-system]
-requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5", "wheel"]
+requires = ["setuptools>=61.00", "setuptools_scm[toml]>=5", "wheel", "pytest"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-# For smarter version schemes and other configuration options,
-# check out https://github.com/pypa/setuptools_scm
 version_scheme = "no-guess-dev"
+tag_regex = '''^(?:[\w-]+)?(?P<version>[vV]?\d+(?:\.\d+){0,2}[^\+]*)(?:\+.*)?$'''
+
+[tool.setuptools.packages.find]
+where = ["geodb"]
+exclude = ["tests*"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "geodb/tests",
+]
+
+[project]
+name = "GeoDB"
+dynamic = ["version"]
+description = "Backend for the 'GeoDB' project"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "uvicorn",
+    "starlette"
+]
+
+
+[project.scripts]
+__main__ = "geodb.website.test:main"
