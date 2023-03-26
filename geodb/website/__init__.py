@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import create_async_engine
 from starlette.applications import Starlette
 from starlette.routing import Mount, Route
-from geodb.test import test
+from test import test
 
-from geodb.common.envars import DATABASE_URL
+from common.envars import DATABASE_URL
 
 
 class Application(Starlette):

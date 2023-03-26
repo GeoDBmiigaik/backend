@@ -1,7 +1,7 @@
 import uvicorn
-import geodb.website
+import website
 port = 8000
 
-app = geodb.website.Application()
+app = website.Application()
 
 uvicorn.run(app, host='0.0.0.0', port=port)
