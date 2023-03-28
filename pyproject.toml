@@ -27,7 +27,10 @@ dependencies = [
     "uvicorn",
     "starlette",
     "sqlalchemy",
-    "asyncpg"
+    "asyncpg",
+    "alembic",
+    "psycopg2-binary",
+    'itsdangerous'
 ]
 
 
