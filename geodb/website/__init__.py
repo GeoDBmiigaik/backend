@@ -8,7 +8,6 @@ from starlette.middleware.cors import CORSMiddleware
 
 from common.envars import DATABASE_URL, COOKIE_SECRET_KEY
 from website import users
-from common.envars import DATABASE_URL
 
 
 class Application(Starlette):
@@ -21,9 +20,7 @@ class Application(Starlette):
                 Mount('/users', routes=users.routes),
             ], )
         ], middleware=[
-            Middleware(CORSMiddleware, allow_origins=['*']),
             Middleware(SessionMiddleware, secret_key=COOKIE_SECRET_KEY),
             Middleware(AuthenticationMiddleware, backend=users.AuthBackend()),
         ])
         self.state.postgres = create_async_engine(DATABASE_URL)
-

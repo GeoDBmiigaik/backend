@@ -15,24 +15,17 @@ class User:
     email: str = None
     username: str = None
     password: str = None
+    right: 'Right' = None
     created_at: datetime = datetime.now(timezone.utc).replace(tzinfo=None)
     disabled_at: datetime = None
 
 
 @dataclass
-class Rights:
+class Right:
     """ Таблица прав пользователей
     """
     right: str
     description: str = None
-
-
-@dataclass
-class UserRights:
-    """ Таблица пользователей и их прав
-    """
-    user_id: int = field(init=False)
-    right: str
 
 
 users = Table(
@@ -62,9 +55,9 @@ user_rights = Table(
 )
 
 mapper_registry.map_imperatively(User, users, properties={
-   'right': relationship(Rights, secondary=user_rights, back_populates="user"),
+   'rights': relationship(Right, secondary=user_rights, back_populates="users", uselist=False),
 })
 
-mapper_registry.map_imperatively(Rights, rights, properties={
-   'user': relationship(User, secondary=user_rights, back_populates="right"),
+mapper_registry.map_imperatively(Right, rights, properties={
+   'users': relationship(User, secondary=user_rights, back_populates="rights"),
 })
