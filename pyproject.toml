@@ -25,9 +25,14 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "uvicorn",
-    "starlette"
+    "starlette",
+    "sqlalchemy",
+    "asyncpg",
+    "alembic",
+    "psycopg2-binary",
+    'itsdangerous'
 ]
 
 
 [project.scripts]
-__main__ = "geodb.website.test:main"
+__main__ = "geodb.website.main:main"
