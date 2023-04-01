@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict, field
 
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from starlette.authentication import AuthenticationBackend, AuthCredentials, BaseUser, UnauthenticatedUser, requires
@@ -10,7 +10,8 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 
-from common.models import User, user_rights
+from common.models import User, user_rights, Right
+from common.repository.users import create_db_user
 from website.utils import JsonParams
 
 
@@ -91,10 +92,18 @@ class Registration(HTTPEndpoint):
                                              )).scalar()
             if account:
                 raise HTTPException(403)
+
             account = User(email, username, password)
+            right = Right(username, '{} right'.format(username))
+            right2 = Right('{} new right'.format(username), '{} right'.format(username))
+            account.rights = [right, right2]
+            session.add_all([right, right2])
             session.add(account)
             await Session.set_session_user(self, request, account.id)
             await session.commit()
+        async with engine.connect() as conn:
+            await create_db_user(conn, username=username, password=password)
+            await conn.commit()
         return Response(status_code=200)
 
 
