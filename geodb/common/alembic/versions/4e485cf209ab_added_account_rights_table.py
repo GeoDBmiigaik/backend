@@ -1,8 +1,8 @@
 """Added account/rights table
 
-Revision ID: 348ac877eb6a
+Revision ID: 4e485cf209ab
 Revises: 0000000000
-Create Date: 2023-03-29 19:45:26.973926
+Create Date: 2023-04-01 19:21:50.671085
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '348ac877eb6a'
+revision = '4e485cf209ab'
 down_revision = '0000000000'
 branch_labels = None
 depends_on = None
@@ -34,10 +34,10 @@ def upgrade() -> None:
     )
     op.create_table('user_rights',
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('right', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['right'], ['rights.name'], ),
+    sa.Column('name', sa.String(), nullable=False),
+    sa.ForeignKeyConstraint(['name'], ['rights.name'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('user_id', 'right', name='primary_user_rights')
+    sa.PrimaryKeyConstraint('user_id', 'name', name='primary_user_rights')
     )
     # ### end Alembic commands ###
 

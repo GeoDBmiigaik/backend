@@ -15,7 +15,7 @@ class User:
     email: str = None
     username: str = None
     password: str = None
-    right: 'Right' = None
+    rights: list['Right'] = field(default_factory=list)
     created_at: datetime = datetime.now(timezone.utc).replace(tzinfo=None)
     disabled_at: datetime = None
 
@@ -24,7 +24,7 @@ class User:
 class Right:
     """ Таблица прав пользователей
     """
-    right: str
+    name: str
     description: str = None
 
 
@@ -50,12 +50,12 @@ user_rights = Table(
     'user_rights',
     metadata,
     Column('user_id', Integer, ForeignKey('users.id')),
-    Column('right', String, ForeignKey('rights.name')),
-    PrimaryKeyConstraint('user_id', 'right', name='primary_user_rights'),
+    Column('name', String, ForeignKey('rights.name')),
+    PrimaryKeyConstraint('user_id', 'name', name='primary_user_rights'),
 )
 
 mapper_registry.map_imperatively(User, users, properties={
-   'rights': relationship(Right, secondary=user_rights, back_populates="users", uselist=False),
+   'rights': relationship(Right, secondary=user_rights, back_populates="users"),
 })
 
 mapper_registry.map_imperatively(Right, rights, properties={
