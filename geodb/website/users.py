@@ -69,7 +69,6 @@ class Session(HTTPEndpoint):
         if request.user.is_authenticated:
             request.session.pop('user', None)
             await self.set_session_user(request, request.user.id)
-        print(request.session['user'])
         return JSONResponse(request.session)
 
     @requires('authenticated')

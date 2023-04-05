@@ -1,3 +1,5 @@
+import decimal
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncConnection
 from starlette.responses import JSONResponse
@@ -27,15 +29,8 @@ async def get_users_table(conn: AsyncConnection, current_user: str):
         result = Result(
             columns=({'field': col, 'headerName': col, 'width': 150, 'editable': True} for col in tuple(data.keys())))
         async for row in data:
-            d = dict()
-            # for key in result.columns:
-            #     print(key)
-            #     print(key['field'])
-            #     print(row._asdict()[key['field']])
-            #     d[key['field']] = row._asdict()[key['field']]
-            #     print(d)
-            result.rows.append({key['field']: row._asdict()[key['field']] for key in result.columns})
-            # result.rows.append(tuple(row._asdict()[key['field']] for key in result.columns))
+            result.rows.append({key['field']: float(row._asdict()[key['field']]) if type(
+                row._asdict()[key['field']]) == decimal.Decimal else row._asdict()[key['field']] for key in
+                                result.columns})
         tables_list.append(result)
-    print(tables_list)
     return tables_list
