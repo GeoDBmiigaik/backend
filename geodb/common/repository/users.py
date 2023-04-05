@@ -1,11 +1,5 @@
-from time import time
-from datetime import datetime, timedelta, timezone
-from dataclasses import dataclass
-from psycopg2 import sql
-from psycopg2 import sql
-
-from sqlalchemy import text, insert, bindparam
-from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncConnection
 
 
 async def create_db_user(conn: AsyncConnection, username: str, password: str):

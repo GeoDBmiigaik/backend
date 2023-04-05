@@ -7,7 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from common.envars import DATABASE_URL, COOKIE_SECRET_KEY
-from website import users
+from website import users, tables
 
 
 class Application(Starlette):
@@ -18,6 +18,7 @@ class Application(Starlette):
         Starlette.__init__(self, routes=[
             Mount('/api', routes=[
                 Mount('/users', routes=users.routes),
+                Mount('/table', routes=tables.routes)
             ], )
         ], middleware=[
             Middleware(SessionMiddleware, secret_key=COOKIE_SECRET_KEY),

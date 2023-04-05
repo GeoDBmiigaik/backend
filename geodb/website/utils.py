@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager, contextmanager
 from starlette.requests import Request
 import logging
 from starlette.exceptions import HTTPException
+import typing as t
 
 
 @asynccontextmanager
@@ -33,3 +34,18 @@ def QueryParams(request: Request):
         else:
             logging.warning(msg)
         raise HTTPException(400, msg)
+
+
+class Result(dict):
+
+    def __init__(self, *, columns: []):
+        super().__init__({'columns': list(columns), 'rows': []})
+
+    @property
+    def rows(self) -> t.List[t.Sequence[t.Any]]:
+        return self['rows']
+
+    @property
+    def columns(self) -> t.Sequence[str]:
+        return self['columns']
+
