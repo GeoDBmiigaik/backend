@@ -4,10 +4,9 @@ from starlette.routing import Mount
 from starlette.middleware import Middleware
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.middleware.cors import CORSMiddleware
 
 from common.envars import DATABASE_URL, COOKIE_SECRET_KEY
-from website import users, tables
+from website import users, tables, admin
 
 
 class Application(Starlette):
@@ -18,7 +17,8 @@ class Application(Starlette):
         Starlette.__init__(self, routes=[
             Mount('/api', routes=[
                 Mount('/users', routes=users.routes),
-                Mount('/table', routes=tables.routes)
+                Mount('/table', routes=tables.routes),
+                Mount('/admin', routes=admin.routes)
             ], )
         ], middleware=[
             Middleware(SessionMiddleware, secret_key=COOKIE_SECRET_KEY),

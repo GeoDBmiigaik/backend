@@ -30,6 +30,21 @@ class Table(HTTPEndpoint):
         else:
             raise HTTPException(401)
 
+    async def post(self, request: Request):
+        engine = request.app.state.postgres
+        async with JsonParams(request) as param:
+            filename = param.get('filename')
+            user = request.session['user']['display_name']
+            async with engine.connect() as conn:
+                password = await (await conn.stream(
+                    text("""select password from users where username = '{}'""".format(user)))).first()
+
+        import subprocess
+        # Скрипт загрузки файла в бд
+        command = """cd ~/Рабочий\ стол/shapes/ && shp2pgsql {} | PGPASSWORD='{}' psql -p 54320 -h localhost -d geodb -U {}""".format(
+            filename[:-4], password[0], user)
+        subprocess.run(command, shell=True)
+        return JSONResponse('ok')
 
 
 routes = [
